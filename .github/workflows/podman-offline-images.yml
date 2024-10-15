@@ -18,8 +18,8 @@ jobs:
     - name: Pull podman Image and Package
       run: |
         image="${{ inputs.podman-images }}"
-        image-file="${image//:/-}"
-        image-file="${image-file//\//-}"
+        image-file="${image//:/_}"
+        image-file="${image-file//\//_}"
         podman pull "${image}"
         podman save "${image}" -o "${image-file}-amd64.tar"
 
