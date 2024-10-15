@@ -1,1 +1,35 @@
 on:
+  workflow_dispatch:
+    inputs:
+      podman-images:
+        description: 'podman image name'
+        required: true
+
+jobs:
+  pull-and-package:
+    runs-on: ubuntu-latest
+    #if:  ${{ inputs.podman-images }} 
+    steps:
+    - name: Clean up data
+      run: |
+          podman system prune -a -f
+          podman volume prune -f
+
+    - name: Pull podman Images and Package
+      run: |
+        images="${{ inputs.podman-images }} "
+        podman pull "${images}" --platform "linux/amd64"
+        podman save "${images}" -o "${images//\//_}-amd64.tar"
+
+    - name: Compress files
+      run: tar -czf amd64-images.tar.gz *-amd64.tar
+
+    - name: Upload files
+      with:
+        name: podman-images-tar
+        path: amd64-images.tar.gz
+        retention-days: 1  # 将保留天数设置为 1 天 最多可设置90天
+
+    - name: Clean up files
+      run: |
+        rm *-amd64.tar
