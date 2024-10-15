@@ -21,7 +21,7 @@ jobs:
         imageFile="${image//:/_}"
         imageFile="${imageFile//\//_}"
         podman pull "${image}"
-        podman save "${image}" -o "${imageFile}-amd64.tar"
+        podman save "${image}" -o "image.tar"
 
     #- name: Compress files
     #  run: tar -czf amd64-images.tar.gz *-amd64.tar
@@ -30,7 +30,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: podman-images-tar
-        path: "${imageFile}-amd64.tar"
+        path: image.tar
         retention-days: 1
 
     - name: Clean up files
