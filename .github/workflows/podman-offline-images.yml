@@ -17,9 +17,9 @@ jobs:
 
     - name: Pull podman Image and Package
       run: |
-        images="${{ inputs.podman-images }} "
-        podman pull "${images}"
-        podman save "${images}" -o "${images//\//_}-amd64.tar"
+        image="${{ inputs.podman-images }}"
+        podman pull "${image}"
+        podman save "${image}" -o "${image//\//_}-amd64.tar"
 
     - name: Compress files
       run: tar -czf amd64-images.tar.gz *-amd64.tar
