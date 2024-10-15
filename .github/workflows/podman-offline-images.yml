@@ -21,7 +21,7 @@ jobs:
         imageFile="${image//:/_}"
         imageFile="${imageFile//\//_}"
         podman pull "${image}"
-        podman save "${image}" -o "image.tar"
+        podman save "${image}" -o image.tar
 
     #- name: Compress files
     #  run: tar -czf amd64-images.tar.gz *-amd64.tar
@@ -35,4 +35,4 @@ jobs:
 
     - name: Clean up files
       run: |
-        rm *-amd64.tar
+        rm image.tar
