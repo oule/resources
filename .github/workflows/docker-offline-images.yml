@@ -1,1 +1,38 @@
+on:
+  workflow_dispatch:
+    inputs:
+      docker-images:
+        description: 'input docker image name'
+        required: true
 
+jobs:
+  pull-and-package:
+    runs-on: ubuntu-latest
+    #if:  ${{ inputs.docker-images }} 
+    steps:
+    - name: Clean up data
+      run: |
+          docker system prune -a -f
+          docker volume prune -f
+
+    - name: Pull docker Image and Package
+      run: |
+        image="${{ inputs.docker-images }}"
+        imageFile="${image//:/_}"
+        imageFile="${imageFile//\//_}"
+        docker pull "${image}"
+        docker save "${image}" -o image.tar
+
+    #- name: Compress files
+    #  run: tar -czf amd64-images.tar.gz *-amd64.tar
+
+    - name: Upload files
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-images-tar
+        path: image.tar
+        retention-days: 1
+
+    - name: Clean up files
+      run: |
+        rm -f image.tar
