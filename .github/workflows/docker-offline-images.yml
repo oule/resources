@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     #if:  ${{ inputs.docker-images }} 
     steps:
-    - name: Clean up data
+    - name: Cleanup data
       run: |
           docker system prune -a -f
           docker volume prune -f
@@ -33,6 +33,6 @@ jobs:
         path: image.tar
         retention-days: 1
 
-    - name: Clean up files
+    - name: Cleanup files
       run: |
         rm -f image.tar
